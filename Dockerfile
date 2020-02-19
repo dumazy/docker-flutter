@@ -1,6 +1,6 @@
 FROM debian:stretch
 
-ARG FLUTTER_VERSION="v1.12.13+hotfix.5"
+ARG FLUTTER_VERSION="v1.12.13+hotfix.7"
 ARG ANDROID_VERSION="29"
 ARG ANDROID_BUILD_TOOLS_VERSION="29.0.2"
 ARG ANDROID_SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip"

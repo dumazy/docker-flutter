@@ -16,11 +16,13 @@ jobs:
     - name: Set tag for Flutter image
       run: echo "::set-env name=FLUTTER_IMAGE_TAG::$(echo ${{github.ref}} | sed 's/refs\/tags\/*//')"
     - name: Build the Docker image  
-      run: docker build . --file Dockerfile --tag docker.pkg.github.com/dumazy/docker-flutter/flutter:$FLUTTER_IMAGE_TAG
-    - name: Test build
-      run: docker run --rm -v "$(pwd)/test/test_project:/src/" docker.pkg.github.com/dumazy/docker-flutter/flutter:$FLUTTER_IMAGE_TAG bash -c "cd /src/ && flutter build apk --pub --release"
+      run: docker build . --file Dockerfile --tag dumazyflutter:$FLUTTER_IMAGE_TAG --tag dumazy/flutter:latest
+    - name: Test builder
+      run: docker run --rm -v "$(pwd)/test/test_project:/src/" dumazy/flutter:$FLUTTER_IMAGE_TAG bash -c "cd /src/ && flutter build apk --pub --release"
+    - name: Test tester
+      run: docker run --rm -v "$(pwd)/test/test_project:/src/" dumazy/flutter:$FLUTTER_IMAGE_TAG bash -c "cd /src/ && flutter test"
     - name: Login to Github Packages Docker
-      run: docker login -u $GITHUB_ACTOR -p ${{secrets.GITHUB_TOKEN}} docker.pkg.github.com
+      run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
     - name: Publish the image
-      run: docker push docker.pkg.github.com/dumazy/docker-flutter/flutter:$FLUTTER_IMAGE_TAG
+      run: docker push dumazy/flutter
       
